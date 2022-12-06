@@ -2,7 +2,7 @@ def part_2(elf_data_filepath):
     max_calories = [0, 0, 0]
     current_calories = 0
     with open(elf_data_filepath) as file:
-        lines = [line.strip() for line in file.read().splitlines()]
+        lines = [int(line) if line.strip() else None for line in file.read().splitlines()]
         for line in lines:
             if not line:
                 max_calories.append(current_calories)
