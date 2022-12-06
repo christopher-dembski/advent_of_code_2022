@@ -4,13 +4,13 @@ def part_2(elf_data_filepath):
     with open(elf_data_filepath) as file:
         lines = [int(line) if line.strip() else None for line in file.read().splitlines()]
         for line in lines:
-            if not line:
+            if line is None:
                 max_calories.append(current_calories)
                 max_calories.sort(reverse=True)
                 max_calories.pop()
                 current_calories = 0
             else:
-                current_calories += int(line)
+                current_calories += line
     return sum(max_calories)
 
 
