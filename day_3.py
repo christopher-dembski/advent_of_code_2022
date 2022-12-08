@@ -21,13 +21,10 @@ def part_1(data_file_path):
 # output: [('sack1_group1', 'sack2_group1', 'sack3_group1'), ...]
 def parse_input_part_2(data_file_path):
     with open(data_file_path) as file:
-        lines = iter(file.read().splitlines())
-        result = []
-        try:
-            while True:
-                result.append((next(lines), next(lines), next(lines)))
-        except StopIteration:
-            return result
+        lines = file.read().splitlines()
+        number_of_lines = len(lines)
+        lines = iter(lines)
+        return [(next(lines), next(lines), next(lines)) for group_number in range(number_of_lines // 3)]
 
 
 def part_2(data_file_path):
