@@ -1,3 +1,5 @@
+from functools import cached_property
+
 TOTAL_DISK_SPACE = 70000000
 REQUIRED_SPACE = 30000000
 
@@ -15,7 +17,7 @@ class Directory(Node):
         super().__init__(name, parent_directory)
         self.children = children
 
-    @property
+    @cached_property  # requires the size not to change after property accessed (i.e. no sub-directories/files added)
     def size(self):
         return sum(child.size for child in self.children.values())
 
@@ -104,4 +106,5 @@ def part_2(data_file_path):
     return directory_size_to_delete(root, space_to_free)
 
 
-print(part_2('inputs/day_7/terminal_output.txt'))
+print(part_1('inputs/day_7/terminal_output.txt'))  # 1306611
+print(part_2('inputs/day_7/terminal_output.txt'))  # 13210366
