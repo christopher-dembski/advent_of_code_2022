@@ -1,16 +1,13 @@
 import re
 from operator import add, mul
 
+PART = 2
+
 
 class Monkey:
     monkeys = []
     next_id = 0
-
-    @classmethod
-    def print_state(cls):
-        print('State')
-        for monkey in cls.monkeys:
-            print(monkey.items)
+    divisors_product = 1
 
     def __init__(self, starting_items, operand1, operator, operand2, test_divisor, true_throw, false_throw):
         self.id = Monkey.next_id
@@ -23,6 +20,7 @@ class Monkey:
         self.true_throw = true_throw
         self.false_throw = false_throw
         self.inspected_items = 0
+        Monkey.divisors_product *= test_divisor
 
     def inspect(self, item_index):
         item = self.items[item_index]
@@ -30,7 +28,11 @@ class Monkey:
         operand2 = item if self.operand2 == 'old' else self.operand2
         operation = add if self.operator == '+' else mul
         self.items[item_index] = operation(operand1, operand2)  # become more worried as monkey inspects
-        self.items[item_index] //= 3  # monkey bored with item, worry drops
+        if PART == 1:
+            self.items[item_index] //= 3  # monkey bored with item, worry drops
+        else:  # PART == 2
+            if self.items[item_index] >= Monkey.divisors_product * 2:
+                self.items[item_index] -= Monkey.divisors_product * (self.items[item_index] // Monkey.divisors_product)
         self.inspected_items += 1
 
     def throw(self, item_index):
@@ -75,13 +77,13 @@ def parse_section(section_text):
                   test_divisor, true_throw, false_throw)
 
 
-def solve(file_path, part):
+def solve(file_path):
     Monkey.monkeys = parse_input(file_path)
-    for round_number in range(20 if part == 1 else 10000):
+    for round_number in range(20 if PART == 1 else 10000):
         for monkey in Monkey.monkeys:
             monkey.throw_items()
     items_inspected = sorted(monkey.inspected_items for monkey in Monkey.monkeys)
     return items_inspected[-1] * items_inspected[-2]
 
 
-print(solve('inputs/day_11/data.txt', 1))
+print(solve('inputs/day_11/data.txt'))
