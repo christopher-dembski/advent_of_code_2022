@@ -40,10 +40,6 @@ def part_1(file_path):
         return sum(snafu_to_decimal(snafu) for snafu in file.read().splitlines())
 
 
-# print(part_1('inputs/day_25/example_data.txt'))
 print(part_1('inputs/day_25/data.txt'))
-# print(decimal_to_snafu(33979178787567))
-# print(snafu_to_decimal('2=5==21-=25==2201==2'))
-# print(decimal_to_snafu(4890))
 print(decimal_to_snafu(33979178787567))
 print(snafu_to_decimal('2-0==21--=0==2201==2'))
