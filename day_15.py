@@ -27,5 +27,33 @@ def part_1(file_path, target_y):
     return len(not_present_target_y)
 
 
-print(part_1('inputs/day_15/example_data.txt', 10))
-print(part_1('inputs/day_15/data.txt', 2000000))
+def is_within_range(x, y, sx, sy, bx, by):
+    manhattan_distance_sensor_beacon = abs(sx - bx) + abs(sy - by)
+    manhattan_distance_point_sensor = abs(x - sx) + abs(y - sy)
+    return manhattan_distance_point_sensor <= manhattan_distance_sensor_beacon
+
+
+def manhattan_border(sx, sy, bx, by):
+    result = set()
+    manhattan_distance_plus_one = abs(sx - bx) + abs(sy - by) + 1
+    for dx in range(manhattan_distance_plus_one + 1):
+        dy = manhattan_distance_plus_one - dx
+        result |= {(sx + dx, sy + dy), (sx + dx, sy - dy), (sx - dx, sy + dy), (sx - dx, sy - dy)}
+    return result
+
+
+def part_2(file_path, max_x, max_y):
+    sensors_beacons = parse_input(file_path)
+    just_out_of_range = set()
+    for (sx, sy), (bx, by) in sensors_beacons:
+        just_out_of_range |= manhattan_border(sx, sy, bx, by)
+    just_out_of_range = {(x, y) for x, y in just_out_of_range if 0 <= x <= max_x and 0 <= y <= max_y}
+    just_out_of_range = {(x, y) for x, y in just_out_of_range
+                         if not any(is_within_range(x, y, sx, sy, bx, by) for (sx, sy), (bx, by) in sensors_beacons)}
+    x, y = just_out_of_range.pop()
+    return x * 4000000 + y
+
+# print(part_1('inputs/day_15/example_data.txt', 10))
+# print(part_1('inputs/day_15/data.txt', 2000000))
+# print(part_2('inputs/day_15/example_data.txt', 20, 20))
+# print(part_2('inputs/day_15/data.txt', 4000000, 4000000))
