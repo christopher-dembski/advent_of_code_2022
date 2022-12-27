@@ -8,27 +8,24 @@ def parse_input(file_path):
         return [((int(sx), int(sy)), (int(bx), int(by))) for sx, sy, bx, by in sensors_beacons]
 
 
-def get_within_range(sx, sy, bx, by):
+def get_within_range_target_y(sx, sy, bx, by, target_y):
     manhattan_distance = abs(sx - bx) + abs(sy - by)
-    result = {(sx, sy)}
-    for step in range(manhattan_distance):
-        for x, y in result.copy():
-            result |= {(x, y + 1), (x + 1, y), (x, y - 1), (x - 1, y)}
-    return result
+    if abs(target_y - sy) > manhattan_distance:
+        return set()
+    remaining_distance = manhattan_distance - abs(target_y - sy)
+    return {x for x in range(sx - remaining_distance, sx + remaining_distance + 1)}
 
 
 def part_1(file_path, target_y):
-    not_present = set()
+    not_present_target_y = set()
     sensors_beacons = parse_input(file_path)
-    sensors_set = {(sx, sy) for (sx, sy), (bx, by) in sensors_beacons}
-    beacons_set = {(bx, by) for (sx, sy), (bx, by) in sensors_beacons}
     for (sx, sy), (bx, by) in sensors_beacons:
-        within_range = get_within_range(sx, sy, bx, by)
-        not_present |= within_range
-    not_present -= sensors_set
-    not_present -= beacons_set
-    return sum(1 for x, y in not_present if y == target_y)
+        within_range_target_row = get_within_range_target_y(sx, sy, bx, by, target_y)
+        not_present_target_y |= within_range_target_row
+    not_present_target_y -= {sx for (sx, sy), (bx, by) in sensors_beacons if sy == target_y}
+    not_present_target_y -= {bx for (sx, sy), (bx, by) in sensors_beacons if by == target_y}
+    return len(not_present_target_y)
 
 
-# print(part_1('inputs/day_15/example_data.txt', 10))
-# print(part_1('inputs/day_15/data.txt', 2000000))
+print(part_1('inputs/day_15/example_data.txt', 10))
+print(part_1('inputs/day_15/data.txt', 2000000))
