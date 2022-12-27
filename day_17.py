@@ -1,4 +1,4 @@
-from itertools import cycle, chain
+from itertools import cycle
 
 
 class Cave:
@@ -6,6 +6,7 @@ class Cave:
     def __init__(self, file_path, part):
         self.part = part
         jet_pattern = self.parse_jet_pattern(file_path)
+        self.jet_pattern_length = len(jet_pattern)
         self.jet_pattern = cycle(jet_pattern)
         self.rock_cycle = cycle((1, 2, 3, 4, 5))
         self.fallen = set()
@@ -62,8 +63,21 @@ class Cave:
     def fall(self):
         self.falling = {(x, y - 1) for x, y in self.falling}
 
+    def is_cycle(self):
+        mid_point = self.max_y // 2
+        for x in range(1, 8):
+            for y in range(1, mid_point + 1):
+                if (x, y) in self.fallen != (x, y + mid_point) in self.fallen:
+                    return False
+        return True
+
     def simulate(self):
         for rock_number in range(2022 if self.part == 1 else 1000000000000):
+            if rock_number and not rock_number % self.jet_pattern_length and not rock_number % 5:
+                print('potential cycle start', rock_number)
+                if self.is_cycle():
+                    print('found cycle')
+                    raise OSError
             self.init_next_rock()
             self.jet_push()
             while not (any(y == 1 for x, y in self.falling) or any((x, y - 1) in self.fallen for x, y in self.falling)):
@@ -80,5 +94,5 @@ class Cave:
         print('\n'.join(''.join(char for char in row) for row in grid), end='\n\n')
 
 
-cave = Cave('inputs/day_17/example_data.txt', part=1)
+cave = Cave('inputs/day_17/data.txt', part=1)
 print(cave.simulate())
