@@ -52,16 +52,11 @@ def mix(nodes):  # MUTATES: linked_list
         to_move.previous_node = current_node
         to_move.next_node = next_node
         next_node.previous_node = to_move
-        # print('Moved', to_move)
-        # print('Result')
-        # to_move.display()
 
 
 def sum_grove_coordinates(nodes):
     result = 0
     current_node = nodes[0]
-    # print('Final')
-    # current_node.display()
     while current_node.value != 0:
         current_node = current_node.next_node
     for i in range(1, 3001):
@@ -100,11 +95,9 @@ def mix_part_2(numbers_original_order, numbers):  # MUTATES: numbers
         del numbers[original_index]
         insertion_index = (original_index + wrapped_number.value) % len(numbers)
         numbers.insert(insertion_index, wrapped_number)
-        # print('Moved', wrapped_number, 'Result', numbers)
 
 
 def sum_grove_coordinates_2(numbers):
-    # print('Final', numbers)
     i = 0
     while numbers[i].value != 0:
         i += 1
@@ -116,16 +109,23 @@ def sum_grove_coordinates_2(numbers):
     return one_thousandth + two_thousandth + three_thousandth
 
 
-def part_2(file_path):
+def part_2(file_path, part):  # can solve both part 1 and part 2
     numbers_original_order = parse_part_2(file_path)
+    if part == 2:
+        for wrapper in numbers_original_order:
+            wrapper.value *= 811589153
     numbers = numbers_original_order.copy()
-    mix_part_2(numbers_original_order, numbers)  # MUTATION: numbers
+    for _ in range(10 if part == 2 else 1):
+        mix_part_2(numbers_original_order, numbers)  # MUTATION: numbers
     return sum_grove_coordinates_2(numbers)
 
 
+# print(part_1('inputs/day_20/example_data.txt'))
+# print(part_2('inputs/day_20/example_data.txt', part=1))
+#
 # print(part_1('inputs/day_20/data.txt'))
-# print(part_2('inputs/day_20/data.txt'))
+# print(part_2('inputs/day_20/data.txt', part=1))
 
-print(part_1('inputs/day_20/data.txt'))
-# print()
-print(part_2('inputs/day_20/data.txt'))
+
+print(part_2('inputs/day_20/example_data.txt', part=2))
+print(part_2('inputs/day_20/data.txt', part=2))
