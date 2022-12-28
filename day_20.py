@@ -55,6 +55,7 @@ def mix(nodes):  # MUTATES: linked_list
 
 
 def sum_grove_coordinates(nodes):
+    print(nodes)
     result = 0
     current_node = nodes[0]
     while current_node.value != 0:
@@ -72,4 +73,53 @@ def part_1(file_path):
     return sum_grove_coordinates(nodes)
 
 
-print(part_1('inputs/day_20/data.txt'))
+class Wrapper:
+
+    def __init__(self, value):
+        self.value = value
+
+    def __eq__(self, other):
+        return self is other
+
+    def __repr__(self):
+        return f'Wrapper({self.value})'
+
+
+def parse_part_2(file_path):
+    with open(file_path) as file:
+        return [Wrapper(int(n)) for n in file.read().splitlines()]
+
+
+def mix_part_2(numbers_original_order, numbers):  # MUTATES: numbers
+    for wrapped_number in numbers_original_order:
+        original_index = numbers.index(wrapped_number)
+        numbers[original_index] = None
+        insertion_index = (original_index + wrapped_number.value) % len(numbers)
+        if wrapped_number.value > 0:
+            insertion_index += 1
+        numbers.insert(insertion_index, wrapped_number)
+        numbers.remove(None)
+
+
+def sum_grove_coordinates_2(numbers):
+    print(numbers)
+    i = 0
+    while numbers[i].value != 0:
+        i += 1
+        if i == len(numbers):
+            i = 0
+    one_thousandth = numbers[(i + 1000) % len(numbers)].value
+    two_thousandth = numbers[(i + 2000) % len(numbers)].value
+    three_thousandth = numbers[(i + 3000) % len(numbers)].value
+    return one_thousandth + two_thousandth + three_thousandth
+
+
+def part_2(file_path):
+    numbers_original_order = parse_part_2(file_path)
+    numbers = numbers_original_order.copy()
+    mix_part_2(numbers_original_order, numbers)  # MUTATION: numbers
+    return sum_grove_coordinates_2(numbers)
+
+
+print(part_1('inputs/day_20/example_data.txt'))  # should match
+print(part_2('inputs/day_20/example_data.txt'))  # should match
