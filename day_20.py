@@ -52,16 +52,16 @@ def mix(nodes):  # MUTATES: linked_list
         to_move.previous_node = current_node
         to_move.next_node = next_node
         next_node.previous_node = to_move
-        print('Moved', to_move)
-        print('Result')
-        to_move.display()
+        # print('Moved', to_move)
+        # print('Result')
+        # to_move.display()
 
 
 def sum_grove_coordinates(nodes):
     result = 0
     current_node = nodes[0]
-    print('Final')
-    current_node.display()
+    # print('Final')
+    # current_node.display()
     while current_node.value != 0:
         current_node = current_node.next_node
     for i in range(1, 3001):
@@ -97,17 +97,14 @@ def parse_part_2(file_path):
 def mix_part_2(numbers_original_order, numbers):  # MUTATES: numbers
     for wrapped_number in numbers_original_order:
         original_index = numbers.index(wrapped_number)
-        numbers[original_index] = None
+        del numbers[original_index]
         insertion_index = (original_index + wrapped_number.value) % len(numbers)
-        if wrapped_number.value > 0:
-            insertion_index += 1
         numbers.insert(insertion_index, wrapped_number)
-        numbers.remove(None)
-        print('Moved', wrapped_number, 'Result', numbers)
+        # print('Moved', wrapped_number, 'Result', numbers)
 
 
 def sum_grove_coordinates_2(numbers):
-    print('Final', numbers)
+    # print('Final', numbers)
     i = 0
     while numbers[i].value != 0:
         i += 1
@@ -129,6 +126,6 @@ def part_2(file_path):
 # print(part_1('inputs/day_20/data.txt'))
 # print(part_2('inputs/day_20/data.txt'))
 
-part_1('inputs/day_20/test.txt')
-print()
-part_2('inputs/day_20/test.txt')
+print(part_1('inputs/day_20/data.txt'))
+# print()
+print(part_2('inputs/day_20/data.txt'))
