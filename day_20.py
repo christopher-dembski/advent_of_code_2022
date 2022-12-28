@@ -52,12 +52,16 @@ def mix(nodes):  # MUTATES: linked_list
         to_move.previous_node = current_node
         to_move.next_node = next_node
         next_node.previous_node = to_move
+        print('Moved', to_move)
+        print('Result')
+        to_move.display()
 
 
 def sum_grove_coordinates(nodes):
-    print(nodes)
     result = 0
     current_node = nodes[0]
+    print('Final')
+    current_node.display()
     while current_node.value != 0:
         current_node = current_node.next_node
     for i in range(1, 3001):
@@ -99,10 +103,11 @@ def mix_part_2(numbers_original_order, numbers):  # MUTATES: numbers
             insertion_index += 1
         numbers.insert(insertion_index, wrapped_number)
         numbers.remove(None)
+        print('Moved', wrapped_number, 'Result', numbers)
 
 
 def sum_grove_coordinates_2(numbers):
-    print(numbers)
+    print('Final', numbers)
     i = 0
     while numbers[i].value != 0:
         i += 1
@@ -121,5 +126,9 @@ def part_2(file_path):
     return sum_grove_coordinates_2(numbers)
 
 
-print(part_1('inputs/day_20/example_data.txt'))  # should match
-print(part_2('inputs/day_20/example_data.txt'))  # should match
+# print(part_1('inputs/day_20/data.txt'))
+# print(part_2('inputs/day_20/data.txt'))
+
+part_1('inputs/day_20/test.txt')
+print()
+part_2('inputs/day_20/test.txt')
