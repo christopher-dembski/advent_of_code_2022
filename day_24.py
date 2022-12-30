@@ -91,4 +91,33 @@ def part1(filepath):
     return minute
 
 
-print(part1('inputs/day_24/data.txt'))
+def part2(filepath):
+    # # # initialize variables # # #
+    blizzards, walls = parse_input(filepath)
+    max_r = max(r for r, c in walls)
+    max_c = max(c for r, c in walls)
+    walls.add((-1, 1))  # block from going outside valley
+    walls.add((max_r + 1, max_c - 1))  # block from going outside valley
+    minute = 0
+    # # # there # # #
+    positions = {(0, 1)}
+    while not any(r == max_r for r, c in positions):
+        blizzards = update_blizzards(blizzards, max_r, max_c)
+        positions = update_positions(positions, blizzards, walls)
+        minute += 1
+    # # # back # # #
+    positions = {(max_r, max_c - 1)}
+    while not any(r == 0 for r, c in positions):
+        blizzards = update_blizzards(blizzards, max_r, max_c)
+        positions = update_positions(positions, blizzards, walls)
+        minute += 1
+    # # # there # # #
+    positions = {(0, 1)}
+    while not any(r == max_r for r, c in positions):
+        blizzards = update_blizzards(blizzards, max_r, max_c)
+        positions = update_positions(positions, blizzards, walls)
+        minute += 1
+    return minute
+
+
+print(part2('inputs/day_24/data.txt'))
