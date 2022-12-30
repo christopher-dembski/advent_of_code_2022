@@ -77,4 +77,17 @@ def part1(filepath):
     return calculate_empty_ground_tiles(elf_positions)
 
 
-print(part1('inputs/day_23/data.txt'))
+def part2(filepath):
+    directions = deque(('NORTH', 'SOUTH', 'WEST', 'EAST'))
+    elf_positions = parse(filepath)
+    round_number = 1
+    new_elf_positions = update_elf_positions(elf_positions, directions)
+    while elf_positions != new_elf_positions:
+        elf_positions = new_elf_positions
+        round_number += 1
+        directions.rotate(-1)
+        new_elf_positions = update_elf_positions(elf_positions, directions)
+    return round_number
+
+
+print(part2('inputs/day_23/data.txt'))
